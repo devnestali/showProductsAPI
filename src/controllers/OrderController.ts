@@ -79,6 +79,24 @@ class OrderController {
 
     response.status(200).json(order)
   }
+
+  async delete(request: Request, response: Response): Promise<void> {
+    let { orderId } = request.params
+
+    if (!orderId) {
+      throw new Error("Numero de pedido não informado.")
+    }
+
+    const orderIdInTypeNumber = Number(orderId)
+
+    await prisma.order.delete({
+      where: {
+        id: orderIdInTypeNumber
+      }
+    })
+
+    response.status(202).json({ message: "Pedido excluido com sucesso." })
+  }
 }
 
 export default OrderController
