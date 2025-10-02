@@ -97,6 +97,38 @@ class OrderController {
 
     response.status(202).json({ message: "Pedido excluido com sucesso." })
   }
+
+  async update(request: Request, response: Response): Promise<void> {
+    const { newTitle, newDescription } = request.body
+    let { orderId } = request.params
+
+    if(!newTitle) {
+      throw new Error("Deve ser informado um titulo")
+    }
+
+    if(!orderId) {
+      throw new Error("Numero de pedido não informado.")
+    }
+
+    const formattedTitle = newTitle.trim()
+    const formattedDescription = newDescription.trim()
+    const orderIdInTypeNumber = Number(orderId)
+
+    await prisma.order.update({
+      where: {
+        id: orderIdInTypeNumber
+      },
+      data: {
+        title: formattedTitle,
+        description: formattedDescription,
+        orderDate: new Date()
+      }
+    })
+
+    response.status(200).json({
+      message: 'Pedido atualizado com sucesso.'
+    })
+  }
 }
 
 export default OrderController
