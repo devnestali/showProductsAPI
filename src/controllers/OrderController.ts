@@ -11,7 +11,7 @@ const orderSchema = z.object({
   userId: z.number()
 })
 
-const orderArraySchema = z.array(orderSchema)
+export const orderArraySchema = z.array(orderSchema)
 
 class OrderController {
   async create(request: Request, response: Response): Promise<void> {
