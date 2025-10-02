@@ -52,7 +52,24 @@ class UserController {
     response.status(201).json({
       message: 'Usuário registrado com sucesso.',
     })
+  }
 
+  async index(request: Request, response: Response): Promise<void> {
+    let userId = request.cookies.userId
+
+    if(!userId) {
+      throw new Error("Usuário não autenticado.")
+    }
+
+    userId = Number(userId)
+
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId
+      }
+    })
+
+    response.status(200).json(user)
   }
 }
 
