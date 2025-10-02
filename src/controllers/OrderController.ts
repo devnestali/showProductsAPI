@@ -52,10 +52,32 @@ class OrderController {
     const validOrder = orderArraySchema.parse(order)
 
     if(!validOrder) {
-      throw new Error("modelo de dados do pedido inválido.")
+      throw new Error("Modelo de dados do pedido inválido.")
     }
 
     response.status(200).json(validOrder)
+  }
+
+  async index(request: Request, response: Response): Promise<void> {
+    let { orderId } = request.params
+
+    if(!orderId) {
+      throw new Error("Numero do pedido não informado.")
+    }
+
+    const orderIdInTypeNumber = Number(orderId)
+
+    const order = await prisma.order.findUnique({
+      where: {
+        id: orderIdInTypeNumber
+      }
+    })
+
+    if(!order) {
+      throw new Error("Pedido não encontrado.")
+    }
+
+    response.status(200).json(order)
   }
 }
 

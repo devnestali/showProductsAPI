@@ -7,6 +7,7 @@ const orderController = new OrderController()
 
 orderRoutes.post('/', asyncHandler(orderController.create.bind(orderController)))
 orderRoutes.get('/', asyncHandler(orderController.show.bind(orderController)))
+orderRoutes.get('/:orderId', asyncHandler(orderController.index.bind(orderController)))
 
 
 export default orderRoutes
