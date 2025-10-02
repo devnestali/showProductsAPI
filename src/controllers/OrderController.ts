@@ -3,7 +3,7 @@ import type { Request, Response } from 'express'
 
 import { prisma } from '../prisma.ts'
 
-const ordersSchema = z.object({
+const orderSchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string().nullable(),
@@ -11,8 +11,7 @@ const ordersSchema = z.object({
   userId: z.number()
 })
 
-
-
+const orderArraySchema = z.array(orderSchema)
 
 class OrderController {
   async create(request: Request, response: Response): Promise<void> {
@@ -41,6 +40,22 @@ class OrderController {
     })
 
     response.status(201).json({ message: 'Pedido criado com sucesso.' })
+  }
+
+  async show(request: Request, response: Response): Promise<void> {
+    const order = await prisma.order.findMany()
+
+    if(!order) {
+      throw new Error("Não foi possível encontrar os pedidos.")
+    }
+
+    const validOrder = orderArraySchema.parse(order)
+
+    if(!validOrder) {
+      throw new Error("modelo de dados do pedido inválido.")
+    }
+
+    response.status(200).json(validOrder)
   }
 }
 
