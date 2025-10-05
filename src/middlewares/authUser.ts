@@ -1,10 +1,12 @@
-import { verify } from 'jsonwebtoken'
+import pkg from 'jsonwebtoken'
+
 import type { Request, Response, NextFunction } from 'express'
 
 import auth from '../config/auth.ts'
 
 function authUser(request: Request, response: Response, next: NextFunction) {
   const authHeader: string | undefined = request.headers.authorization
+  const { verify } = pkg
 
   if (!authHeader) {
     throw new Error('token não encontrado.')
