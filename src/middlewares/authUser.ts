@@ -12,6 +12,7 @@ function authUser(request: Request, response: Response, next: NextFunction) {
     throw new Error('token não encontrado.')
   }
 
+
   const [, token] = authHeader.split(' ')
 
   try {

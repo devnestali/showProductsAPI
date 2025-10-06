@@ -1,6 +1,6 @@
 export default {
   jwt: {
     secret: 'default',
-    expiresIn: '1d'
+    expiresIn: 24 * 60  * 60 * 1000
   }
 }
