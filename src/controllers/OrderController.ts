@@ -14,18 +14,18 @@ const orderSchema = z.object({
 export const orderArraySchema = z.array(orderSchema)
 
 class OrderController {
-  async create(request: Request, response: Response): Promise<void> {
+  async create(request: Request, response: Response): Promise<Response | void> {
     const { title, description } = request.body
     let userId = request.cookies.userId
     
     if(!userId) {
-      throw new Error('Usuário não autenticado.')
+      return response.status(401).json({ message: 'Usuário não autenticado.' })
     }
 
     userId = Number(userId)
     
     if(!title) {
-      throw new Error('Título deve ser preenchido.')
+      return response.status(400).json({ message: 'Título deve ser preenchido.' })
     }
     
     const formattedTitle = title.trim()
@@ -39,30 +39,30 @@ class OrderController {
       }
     })
 
-    response.status(201).json({ message: 'Pedido criado com sucesso.' })
+    return response.status(201).json({ message: 'Pedido criado com sucesso.' })
   }
 
-  async show(request: Request, response: Response): Promise<void> {
+  async show(request: Request, response: Response): Promise<Response | undefined> {
     const order = await prisma.order.findMany()
 
     if(!order) {
-      throw new Error("Não foi possível encontrar os pedidos.")
+      return response.status(404).json({ message: 'Não foi possível encontrar os pedidos.' })
     }
 
     const validOrder = orderArraySchema.parse(order)
 
     if(!validOrder) {
-      throw new Error("Modelo de dados do pedido inválido.")
+      return response.status(422).json({ message: 'Modelo de dados do pedido inválido.' })
     }
 
-    response.status(200).json(validOrder)
+    return response.status(200).json(validOrder)
   }
 
-  async index(request: Request, response: Response): Promise<void> {
+  async index(request: Request, response: Response): Promise<Response | undefined> {
     let { orderId } = request.params
 
     if(!orderId) {
-      throw new Error("Numero do pedido não informado.")
+      return response.status(400).json({ message: 'Numero do pedido não informado.' })
     }
 
     const orderIdInTypeNumber = Number(orderId)
@@ -74,17 +74,17 @@ class OrderController {
     })
 
     if(!order) {
-      throw new Error("Pedido não encontrado.")
+      return response.status(404).json({ message: 'Pedido não encontrado.' })
     }
 
-    response.status(200).json(order)
+    return response.status(200).json(order)
   }
 
-  async delete(request: Request, response: Response): Promise<void> {
+  async delete(request: Request, response: Response): Promise<Response | undefined> {
     let { orderId } = request.params
 
     if (!orderId) {
-      throw new Error("Numero de pedido não informado.")
+      return response.status(400).json({ message: 'Numero de pedido não informado.' })
     }
 
     const orderIdInTypeNumber = Number(orderId)
@@ -95,19 +95,19 @@ class OrderController {
       }
     })
 
-    response.status(202).json({ message: "Pedido excluido com sucesso." })
+    return response.status(202).json({ message: "Pedido excluido com sucesso." })
   }
 
-  async update(request: Request, response: Response): Promise<void> {
+  async update(request: Request, response: Response): Promise<Response | undefined> {
     const { newTitle, newDescription } = request.body
     let { orderId } = request.params
 
     if(!newTitle) {
-      throw new Error("Deve ser informado um titulo")
+      return response.status(400).json({ message: 'O título não pode estar vazio.' })
     }
 
     if(!orderId) {
-      throw new Error("Numero de pedido não informado.")
+      return response.status(400).json({ message: 'Numero de pedido não informado.' })
     }
 
     const formattedTitle = newTitle.trim()
@@ -125,7 +125,7 @@ class OrderController {
       }
     })
 
-    response.status(200).json({
+    return response.status(200).json({
       message: 'Pedido atualizado com sucesso.'
     })
   }

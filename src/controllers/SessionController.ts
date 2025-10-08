@@ -6,14 +6,16 @@ import { prisma } from '../prisma.ts';
 import auth from '../config/auth.ts';
 
 class SessionController {
-  async create(request: Request, response: Response): Promise<void> {
+  async create(request: Request, response: Response): Promise<Response | undefined> {
     const { email, password } = request.body
     const { secret, expiresIn }: { secret: string, expiresIn: number } = auth.jwt
     const { sign } = pkg
 
     const emptyFields = !email || !password
 
-    if (emptyFields) throw new Error('Todos os campos devem ser preenchidos.')
+    if (emptyFields) {
+      return response.status(400).json({ message: 'Todos os campos devem ser preenchidos.' })
+    }
 
     const user = await prisma.user.findUnique({
       where: {
@@ -21,11 +23,15 @@ class SessionController {
       }
     })
 
-    if(!user) throw new Error('Email e/ou senha incorretos.')
+    if(!user) {
+      return response.status(401).json({ message: 'Email e/ou senha incorretos.' })
+    }
 
     const passwordMatch = await compare(password, user.password)
 
-    if(!passwordMatch) throw new Error('Email e/ou senha incorretos.')
+    if(!passwordMatch) {
+      return response.status(401).json({ message: 'Email e/ou senha incorretos.' })
+    }
 
     const options: SignOptions = {
       subject: String(user.id),
@@ -41,7 +47,7 @@ class SessionController {
       token
     }
 
-    response.status(200).json(authenticatedUser)
+    return response.status(200).json(authenticatedUser)
   }
 }
 

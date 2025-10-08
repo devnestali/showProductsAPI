@@ -7,17 +7,17 @@ import { orderArraySchema } from "./OrderController.ts";
 
 
 class GraphController {
-  async show(request: Request, response: Response): Promise<void> {
+  async show(request: Request, response: Response): Promise<Response | undefined> {
     const orders = await prisma.order.findMany()
 
     if(!orders || orders.length === 0) {
-      throw new Error("Não foi possível encontrar os pedidos.")
+      return response.status(404).json({ message: 'Nenhum pedido encontrado.'})
     }
 
     const validOrders = orderArraySchema.parse(orders)
 
     if(!validOrders) {
-      throw new Error("Modelo de dados de pedidos inválidos.")
+      return response.status(409).json({ message: 'Modelo de dados de pedidos inválidos.' })
     }
 
     let ordersByDate: Record<string, number> = {}
@@ -30,7 +30,7 @@ class GraphController {
       ordersByDate[refactoredDate] = (ordersByDate[refactoredDate] || 0) + 1
     })
 
-    response.status(200).json(ordersByDate)
+    return response.status(200).json(ordersByDate)
   }
 }
 

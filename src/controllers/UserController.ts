@@ -4,25 +4,25 @@ import bcrypt from "bcrypt"
 import { prisma } from "../prisma.ts";
 
 class UserController {
-  async create(request: Request, response: Response): Promise<void> {
+  async create(request: Request, response: Response): Promise<Response | undefined> {
     const { username, email, password } = request.body
 
     const emptyFields = !username || !email || !password
 
     if(emptyFields) {
-      throw new Error("Preencha todos os campos antes de entrar")
+      return response.status(400).json({ message: 'Preencha todos os campos.' })
     }
 
     const emailAlreadyExists = await prisma.user.findUnique({ where: { email } })
 
     if (emailAlreadyExists) {
-      throw new Error("O e-mail já existe.")
+      return response.status(409).json({ message: 'O e-mail já existe.' })
     }
 
     const usernameAlreadyExists = await prisma.user.findUnique({ where: { username } })
 
     if (usernameAlreadyExists) {
-      throw new Error("Já existe um usuário com esse nome.")
+      return response.status(409).json({ message: 'Já existe um usuário com esse nome.' })
     }
 
     const formattedUsername = username.trim()
@@ -44,16 +44,16 @@ class UserController {
       sameSite: "strict"
     })
 
-    response.status(201).json({
+    return response.status(201).json({
       message: 'Usuário registrado com sucesso.',
     })
   }
 
-  async index(request: Request, response: Response): Promise<void> {
+  async index(request: Request, response: Response): Promise<Response | undefined> {
     const userIdStr = request.query.userId
 
     if(!userIdStr) {
-      throw new Error("Usuário não autenticado.")
+      return response.status(401).json({ message: 'Usuário não autenticado.' })
     }
 
     const userId = Number(userIdStr)
@@ -64,7 +64,7 @@ class UserController {
       }
     })
 
-    response.status(200).json(user)
+    return response.status(200).json(user)
   }
 }
 
