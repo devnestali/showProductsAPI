@@ -46,11 +46,3 @@ class SessionController {
 }
 
 export default SessionController
-
-/**
-  Próximos passos para a realização do projeto: 
-
-  - Testar a criacao do sessionController e o sessionRoutes
-  - Testar tudo no Postman e adicionar o token no header da requisição 
-  para poder executar o middleware de autenticação
- */

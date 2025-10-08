@@ -5,11 +5,7 @@ import { prisma } from "../prisma.ts";
 
 class UserController {
   async create(request: Request, response: Response): Promise<void> {
-    const { username, email, password, isAdmin } = request.body
-
-    if(!isAdmin) {
-      throw new Error("Somente administradores podem acessar essa página.")
-    }
+    const { username, email, password } = request.body
 
     const emptyFields = !username || !email || !password
 
@@ -38,7 +34,6 @@ class UserController {
         username: formattedUsername,
         email: formattedEmail,
         password: hashedPassword,
-        isAdmin
       }
     })
 
@@ -55,13 +50,13 @@ class UserController {
   }
 
   async index(request: Request, response: Response): Promise<void> {
-    let userId = request.cookies.userId
+    const userIdStr = request.query.userId
 
-    if(!userId) {
+    if(!userIdStr) {
       throw new Error("Usuário não autenticado.")
     }
 
-    userId = Number(userId)
+    const userId = Number(userIdStr)
 
     const user = await prisma.user.findUniqueOrThrow({
       where: {

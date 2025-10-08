@@ -9,7 +9,7 @@ import sessionRoutes from "./Session.routes.ts";
 
 const routes = Router()
 
-routes.use('/user', authUser, userRoutes)
+routes.use('/user', userRoutes)
 routes.use('/order', authUser, orderRoutes)
 routes.use('/graph', authUser, graphRoutes)
 routes.use('/session', sessionRoutes)
