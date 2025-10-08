@@ -9,7 +9,7 @@ function authUser(request: Request, response: Response, next: NextFunction) {
   const { verify } = pkg
 
   if (!authHeader) {
-    throw new Error('token não encontrado.')
+    return response.status(401).json({ message: 'token não encontrado.' })
   }
 
 
@@ -23,7 +23,7 @@ function authUser(request: Request, response: Response, next: NextFunction) {
     }
 
   } catch (error) {
-    throw new Error('Token Inválido.')
+    return response.status(401).json({ message: 'Token Inválido.' })
   }
 }
 
