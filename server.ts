@@ -16,6 +16,13 @@ app.use(cors({
   allowedHeaders: ['Authorization', 'Content-Type']
 }))
 
+app.options('*', cors({
+  origin: 'https://show-products-nine.vercel.app',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Authorization', 'Content-Type']
+}))
+
 app.use(express.json())
 
 app.use(cookieParser())
