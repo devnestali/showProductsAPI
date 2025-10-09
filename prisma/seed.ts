@@ -3,6 +3,10 @@ import { prisma } from "../src/prisma.js"
 async function seedDb() {
   console.log("Seeding database...")
 
+  await prisma.order.deleteMany()
+  
+  await prisma.user.deleteMany()
+
   await prisma.user.create({
     data: {
       username: "admin",
