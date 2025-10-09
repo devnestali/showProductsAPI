@@ -10,7 +10,7 @@ const app = express()
 const PORT = 3333
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://show-products-nine.vercel.app/',
   credentials: true
 }))
 
