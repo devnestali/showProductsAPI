@@ -11,7 +11,9 @@ const PORT = 3333
 
 app.use(cors({
   origin: 'https://show-products-nine.vercel.app',
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Authorization', 'Content-Type']
 }))
 
 app.use(express.json())
