@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import type { Request, Response } from 'express'
 
-import { prisma } from '../prisma.ts'
+import { prisma } from '../prisma.js'
 
 const orderSchema = z.object({
   id: z.number(),

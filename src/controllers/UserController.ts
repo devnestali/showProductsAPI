@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcrypt"
 
-import { prisma } from "../prisma.ts";
+import { prisma } from "../prisma.js";
 
 class UserController {
   async create(request: Request, response: Response): Promise<Response | undefined> {

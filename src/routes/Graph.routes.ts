@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import GraphController from "../controllers/GraphController.ts";
+import GraphController from "../controllers/GraphController.js";
 
 const graphRoutes = Router()
 const graphController = new GraphController()

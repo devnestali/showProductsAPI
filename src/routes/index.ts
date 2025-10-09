@@ -1,11 +1,11 @@
 import { Router } from "express";
 
-import userRoutes from "./User.routes.ts";
-import orderRoutes from "./Order.routes.ts";
-import graphRoutes from "./Graph.routes.ts";
+import userRoutes from "./User.routes.js";
+import orderRoutes from "./Order.routes.js";
+import graphRoutes from "./Graph.routes.js";
 
-import authUser from "../middlewares/authUser.ts";
-import sessionRoutes from "./Session.routes.ts";
+import authUser from "../middlewares/authUser.js";
+import sessionRoutes from "./Session.routes.js";
 
 const routes = Router()
 

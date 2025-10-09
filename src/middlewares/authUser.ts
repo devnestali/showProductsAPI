@@ -2,7 +2,7 @@ import pkg from 'jsonwebtoken'
 
 import type { Request, Response, NextFunction } from 'express'
 
-import auth from '../config/auth.ts'
+import auth from '../config/auth.js'
 
 function authUser(request: Request, response: Response, next: NextFunction) {
   const authHeader: string | undefined = request.headers.authorization

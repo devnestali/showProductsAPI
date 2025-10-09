@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 
-import { prisma } from "../prisma.ts";
+import { prisma } from "../prisma.js";
 
-import { orderArraySchema } from "./OrderController.ts";
+import { orderArraySchema } from "./OrderController.js";
 
 
 

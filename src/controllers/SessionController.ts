@@ -2,8 +2,8 @@ import { compare } from 'bcrypt';
 import pkg, { type SignOptions } from 'jsonwebtoken'
 import type { Request, Response } from 'express'
 
-import { prisma } from '../prisma.ts';
-import auth from '../config/auth.ts';
+import { prisma } from '../prisma.js';
+import auth from '../config/auth.js';
 
 class SessionController {
   async create(request: Request, response: Response): Promise<Response | undefined> {
