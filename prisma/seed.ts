@@ -1,4 +1,5 @@
 import { prisma } from "../src/prisma.js"
+import bcrypt from 'bcrypt'
 
 async function seedDb() {
   console.log("Seeding database...")
@@ -7,20 +8,26 @@ async function seedDb() {
   
   await prisma.user.deleteMany()
 
+  const adminPassword = 'admin'
+  const hashedAdminPassword = bcrypt.hashSync(adminPassword, 8)
+  
   await prisma.user.create({
     data: {
       username: "admin",
       email: "admin@email.com",
-      password: "admin",
+      password: hashedAdminPassword,
       isAdmin: true
     }
   })
+
+  const userPassword = 'user'
+  const hashedUserPassword = bcrypt.hashSync(userPassword, 8)
 
   const user = await prisma.user.create({
     data: {
       username: "user",
       email: "user@email.com",
-      password: "user",
+      password: hashedUserPassword,
       isAdmin: false
     }
   })
