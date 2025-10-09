@@ -10,14 +10,14 @@ const app = express()
 const PORT = 3333
 
 app.use(cors({
-  origin: 'https://show-products-nine.vercel.app',
+  origin: 'https://show-products-aq7u81qsn-devnestalis-projects.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization', 'Content-Type']
 }))
 
 app.options('*', cors({
-  origin: 'https://show-products-nine.vercel.app',
+  origin: 'https://show-products-aq7u81qsn-devnestalis-projects.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization', 'Content-Type']
